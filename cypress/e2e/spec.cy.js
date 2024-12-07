@@ -68,4 +68,59 @@ describe('TODOMvc App', () => {
       .children()
       .should('have.length', 2);
   });
+
+  it('Edita uma tarefa', () => {
+    cy.visit('');
+
+    cy.get('[data-cy=todo-input]')
+    .type('Roteiro prático de Cypress - ES{enter}')
+    .type('Prova de ES{enter}');
+
+    cy.get('[data-cy=todos-list] > li')
+      .first()
+      .dblclick()
+      .type(' - TP2 de ES{enter}');
+
+      cy.get('[data-cy=todos-list]')
+      .children()
+      .should('have.length', 2) 
+      .first()
+      .should('have.text', 'Roteiro prático de Cypress - ES - TP2 de ES');
+  });
+
+  it('Marca todas as tarefas como completas', () => {
+    cy.visit('');
+
+    cy.get('[data-cy=todo-input]')
+      .type('Roteiro prático de Cypress - ES{enter}')
+      .type('Prova de ES{enter}');
+
+    cy.get('.toggle-all-label')
+      .click();
+
+    cy.get('[data-cy=todos-list] > li [data-cy=toggle-todo-checkbox]')
+      .should('be.checked');
+  });
+
+  it('Deleta todas as tarefas completas', () => {
+    cy.visit('');
+
+    cy.get('[data-cy=todo-input]')
+      .type('Roteiro prático de Cypress - ES{enter}')
+      .type('Prova de ES{enter}')
+      .type('TP2 de ES{enter}');
+
+    cy.get('[data-cy=todos-list] > li [data-cy=toggle-todo-checkbox]')
+      .first()
+      .click();
+
+    cy.get('.clear-completed')
+      .click();
+
+    cy.get('[data-cy=todos-list]')
+      .children()
+      .should('have.length', 2)
+      .first()
+      .should('have.text', 'Prova de ES');
+  });
 });
